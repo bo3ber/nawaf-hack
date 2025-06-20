@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hacked by Nawwaf</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    body, html {
+      width: 100%;
+      height: 100%;
+      background: black;
+    }
+    video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: 0;
+    }
+    .love {
+      position: absolute;
+      color: red;
+      font-size: 3em;
+      font-weight: bold;
+      z-index: 1;
+      animation: fadeout 1s forwards;
+    }
+    @keyframes fadeout {
+      0% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <video id="hackVideo" autoplay>
+    <source src="hack.mp4" type="video/mp4">
+  </video>
+
+  <script>
+    const video = document.getElementById('hackVideo');
+
+    // نحاول نشغل الفيديو بالصوت
+    video.muted = false;
+    video.play().catch(() => {
+      // إذا ما قدر يشغله بالصوت، نخليه بدون صوت ويعيد المحاولة
+      video.muted = true;
+      video.play();
+    });
+
+    const blockTime = 46 * 1000;
+
+    // تمنع الخروج
+    const blockKeys = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    };
+    ['keydown', 'keyup', 'contextmenu'].forEach(evt =>
+      window.addEventListener(evt, blockKeys, true)
+    );
+
+    // تمنع الماوس
+    window.oncontextmenu = () => false;
+
+    // تمنع التنقل أو الإغلاق
+    window.onbeforeunload = () => "System Error";
+
+    // بعد انتهاء الوقت يتم السماح بالتحكم
+    setTimeout(() => {
+      ['keydown', 'keyup', 'contextmenu'].forEach(evt =>
+        window.removeEventListener(evt, blockKeys, true)
+      );
+      window.onbeforeunload = null;
+    }, blockTime);
+
+    // كل ثانيتين يظهر نص Nawwaf loves you
+    setInterval(() => {
+      const msg = document.createElement("div");
+      msg.className = "love";
+      msg.textContent = "Nawwaf loves you";
+      msg.style.top = Math.random() * window.innerHeight + "px";
+      msg.style.left = Math.random() * window.innerWidth + "px";
+      document.body.appendChild(msg);
+      setTimeout(() => msg.remove(), 1000);
+    }, 2000);
+  </script>
+</body>
+</html>
